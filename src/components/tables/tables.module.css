@@ -1,0 +1,89 @@
+.positionsDiv {
+  background-color: gold;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.tr {
+  background-color: white;
+}
+
+.trTitle {
+  background-color: brown;
+  color: white;
+}
+
+.td, .th {
+  padding: 1rem 3rem;
+  text-align: center;
+}
+
+.over107 {
+  background-color: rgba(255, 0, 0, 0.2);
+
+  .td {
+    color: #ff0000;
+    font-weight: bold;
+  }
+}
+
+.ambulance {
+  display: flex;
+  padding: 0 3rem;
+  font-size: 2rem;
+}
+
+.totalPoints {
+  font-weight: bold;
+  background-color: lightyellow;
+}
+
+.championshipRow:nth-child(1) .totalPoints {
+  background-color: gold;
+  font-size: 1.1em;
+}
+
+.championshipRow:nth-child(2) .totalPoints {
+  background-color: silver;
+}
+
+.championshipRow:nth-child(3) .totalPoints {
+  background-color: #cd7f32;
+}
+
+.selectorContainer {
+  margin: 20px auto;
+  text-align: center;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.selector {
+  padding: 10px 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: white;
+  font-size: 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.selector:hover {
+  border-color: lightyellow;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.selectedDate {
+  background-color: lightyellow;
+  font-weight: bold;
+}
