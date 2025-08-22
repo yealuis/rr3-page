@@ -25,6 +25,10 @@
   text-align: center;
 }
 
+.tdBar {
+  padding: 1rem 0;
+}
+
 .over107 {
   background-color: rgba(255, 0, 0, 0.2);
 
@@ -86,4 +90,94 @@
 .selectedDate {
   background-color: lightyellow;
   font-weight: bold;
+}
+
+/* Estilos para la tabla de diferencias */
+.deltaTable {
+  margin-top: 2rem;
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.deltaTable h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.deltaTableInner {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.barContainer {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  height: 24px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.deltaBar {
+  height: 100%;
+  background: brown;
+  transition: width 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.scaleMarker {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 0;
+}
+
+.timeScale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 5px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.scaleInner {
+  width: calc(100% - 50px);
+  display: flex;
+  justify-content: space-between;
+}
+
+.gapLabel {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #444;
+  font-weight: 500;
+}
+
+.carImage {
+  position: absolute;
+  top: -12px;
+  left: 100%;
+  z-index: 2;
+}
+
+.deltaTableInner th:nth-child(1),
+.deltaTableInner td:nth-child(1) {
+  width: 15%;
+}
+
+.deltaTableInner th:nth-child(2),
+.deltaTableInner td:nth-child(2) {
+  width: 15%;
 }
