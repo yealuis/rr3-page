@@ -345,6 +345,48 @@ export const season30 = [
       },
     ]
   },
+  {
+    date: "Fecha 8",
+    type: "Resistencia",
+    circuit: "Dubai Autodrome",
+    country: "Emiratos Árabes Unidos",
+    group: "Profesional",
+    serie: "Club de Producción Japonesa",
+    level: "Nivel 2",
+    cars: ["Mazda RX-7"],
+    results: [
+      {
+        name: "Luis J.",
+        distance: 19.95,
+        country: "VEN",
+      },
+      {
+        name: "Felix R.",
+        distance: 21.24,
+        country: "VEN",
+      },
+      {
+        name: "Wilfredo A.",
+        distance: 2.95,
+        country: "VEN",
+      },
+      {
+        name: "Alejandro M.",
+        distance: 16.73,
+        country: "VEN",
+      },
+      {
+        name: "Carlos S.",
+        distance: 19.28,
+        country: "VEN",
+      },
+      {
+        name: "Victor H.",
+        distance: 20.44,
+        country: "VEN",
+      },
+    ]
+  },
 ]
 
 export const mcurSeason1 = [
