@@ -112,7 +112,7 @@
 }
 
 .deltaTableInner {
-  width: 100%;
+  width: 100rem;
   border-collapse: collapse;
 }
 
@@ -174,10 +174,25 @@
 
 .deltaTableInner th:nth-child(1),
 .deltaTableInner td:nth-child(1) {
-  width: 15%;
+  width: 10%;
 }
 
 .deltaTableInner th:nth-child(2),
 .deltaTableInner td:nth-child(2) {
-  width: 15%;
+  width: 10%;
+}
+
+/* --- Hacemos las tablas desplazables en móviles --- */
+@media (max-width: 600px) {
+  .scrollTable {
+    width: 100vw;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  .deltaTableInner, .table {
+    font-size: 0.82rem;
+    min-width: 420px;
+  }
 }

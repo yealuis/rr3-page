@@ -110,65 +110,67 @@ const DeltaTable = ({ drivers, title }) => {
   return (
     <div className={styles.deltaTable}>
       {title && <h2>{title}</h2>}
-      <table className={styles.deltaTableInner}>
-        <thead>
-          <tr>
-            <th className={styles.th}>Piloto</th>
-            <th className={styles.th}>Diferencia</th>
-            <th className={styles.th}>Comparación</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Fila del líder */}
-          <tr>
-            <td className={styles.td}>{drivers[0]?.name}</td>
-            <td className={styles.td}>{leaderDisplay}</td>
-            <td className={styles.tdBar}>
-              <div className={styles.barContainer}>
-                <div className={styles.scaleMarker} style={{ left: '0%' }}>
-                  <Image src={"/formula1Car.webp"} alt="Formula 1 Car" width={50} height={50} className={styles.carImage}/>
-                </div>
-              </div>
-            </td>
-          </tr>
-          {/* Filas de los demás pilotos */}
-          {drivers.slice(1).map((driver, index) => (
-            <tr key={index}>
-              <td className={styles.td}>{driver.name}</td>
-              <td className={styles.td}>{driver.deltaDisplay}</td>
+      <div className={styles.scrollTable}>
+        <table className={`${styles.deltaTableInner} ${styles.table}`}>
+          <thead>
+            <tr>
+              <th className={styles.th}>Piloto</th>
+              <th className={styles.th}>Diferencia</th>
+              <th className={styles.th}>Comparación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Fila del líder */}
+            <tr>
+              <td className={styles.td}>{drivers[0]?.name}</td>
+              <td className={styles.td}>{leaderDisplay}</td>
               <td className={styles.tdBar}>
                 <div className={styles.barContainer}>
-                  <div className={styles.deltaBar} style={{ width: maxDelta > 0 ? `calc(${(driver.diff / maxDelta) * 100}% - 50px)` : '0%', minWidth: '0'}}>
-                    { index === drivers.length -2
-                    ? <Image src={"/ambulance.webp"} alt="ambulance" width={50} height={50} className={styles.carImage}/>
-                    : <Image src={"/formula1Car.webp"} alt="Formula 1 Car" width={50} height={50} className={styles.carImage}/>
-                    }
+                  <div className={styles.scaleMarker} style={{ left: '0%' }}>
+                    <Image src={"/formula1Car.webp"} alt="Formula 1 Car" width={50} height={50} className={styles.carImage}/>
                   </div>
                 </div>
               </td>
             </tr>
-          ))}
-          <tr>
-            <td className={styles.td}></td>
-            <td className={styles.td}></td>
-            <td className={styles.timeScale}>
-              <div className={styles.scaleInner}>
-                {Array.from({ length: 9 + 1 }, (_, i) => {
-                  let valor;
-                  if (unidad === "km" || unidad === "km/h") {
-                    valor = ((i * maxDelta) / 9).toFixed(2);
-                  } else if (unidad === "m") {
-                    valor = Math.round((i * maxDelta) / 9);
-                  } else {
-                    valor = ((i * maxDelta) / 9 / 1000).toFixed(2);
-                  }
-                  return <span key={i}>{valor} {unidad}</span>;
-                })}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            {/* Filas de los demás pilotos */}
+            {drivers.slice(1).map((driver, index) => (
+              <tr key={index}>
+                <td className={styles.td}>{driver.name}</td>
+                <td className={styles.td}>{driver.deltaDisplay}</td>
+                <td className={styles.tdBar}>
+                  <div className={styles.barContainer}>
+                    <div className={styles.deltaBar} style={{ width: maxDelta > 0 ? `calc(${(driver.diff / maxDelta) * 100}% - 50px)` : '0%', minWidth: '0'}}>
+                      { index === drivers.length -2
+                      ? <Image src={"/ambulance.webp"} alt="ambulance" width={50} height={50} className={styles.carImage}/>
+                      : <Image src={"/formula1Car.webp"} alt="Formula 1 Car" width={50} height={50} className={styles.carImage}/>
+                      }
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td className={styles.td}></td>
+              <td className={styles.td}></td>
+              <td className={styles.timeScale}>
+                <div className={styles.scaleInner}>
+                  {Array.from({ length: 9 + 1 }, (_, i) => {
+                    let valor;
+                    if (unidad === "km" || unidad === "km/h") {
+                      valor = ((i * maxDelta) / 9).toFixed(2);
+                    } else if (unidad === "m") {
+                      valor = Math.round((i * maxDelta) / 9);
+                    } else {
+                      valor = ((i * maxDelta) / 9 / 1000).toFixed(2);
+                    }
+                    return <span key={i}>{valor} {unidad}</span>;
+                  })}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
@@ -415,16 +417,20 @@ const deltaDrivers = sortedDrivers.map((driver, index) => {
         {circuit} - {country} <br/>
         {cars && cars.length > 0 && `${cars.join(', ')}`}
       </h1>
-      <table>
-        <thead>
-          {renderTableHeaders()}
-        </thead>
-        <tbody>
-          {renderTableRows()}
-        </tbody>
-      </table>
-      <DeltaTable drivers={deltaDrivers} title={`Diferencias de ${type}`} />
-      {hayVueltaRapida && <DeltaTable drivers={deltaDriversFastLap} title="Diferencias de Vuelta Rápida" />}
+      <div className={styles.scrollTable}>
+        <table className={styles.table}>
+          <thead>
+            {renderTableHeaders()}
+          </thead>
+          <tbody>
+            {renderTableRows()}
+          </tbody>
+        </table>
+      </div>
+      <div className={styles.scrollTable}>
+        <DeltaTable drivers={deltaDrivers} title={`Diferencias de ${type}`} />
+        {hayVueltaRapida && <DeltaTable drivers={deltaDriversFastLap} title="Diferencias de Vuelta Rápida" />}
+      </div>
     </div>
   )
 }
@@ -450,38 +456,40 @@ const RaceEvents = () => {
 
       <div className={styles.positionsDiv}>
         <h1 className={styles.title}>Campeonato - Clasificación General</h1>
-        <table>
-          <thead>
-            <tr className={`${styles.tr} ${styles.trTitle}`}>
-              <th className={styles.th}>Posicion</th>
-              <th className={styles.th}>Piloto</th>
-              <th className={styles.th}>País</th>
-              <th className={styles.th}>Puntos</th>
-              {raceEvent.map((event, i) => (
-                <th key={i} className={styles.th}>{event.date}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {championshipStandings.map((driver, index) => (
-              <tr key={driver.name} className={`${styles.tr} ${styles.championshipRow}`}>
-                <td className={styles.td}>{index + 1}</td>
-                <td className={styles.td}>{driver.name}</td>
-                <td className={styles.td}>{driver.country}</td>
-                <td className={`${styles.td} ${styles.totalPoints}`}>{driver.totalPoints}</td>
-                {raceEvent.map((event, i) => {
-                  const eventResult = driver.events.find(e => e.date === event.date)
-                  const isSelected = event.date === selectedDate
-                  return (
-                    <td key={i} className={`${styles.td} ${isSelected ? styles.selectedDate : ''}`}>
-                      {eventResult ? `${eventResult.position}° (${eventResult.points + eventResult.fPoints})` : 'DNF'}
-                    </td>
-                  )
-                })}
+        <div className={styles.scrollTable}>
+          <table className={styles.table}>
+            <thead>
+              <tr className={`${styles.tr} ${styles.trTitle}`}>
+                <th className={styles.th}>Posicion</th>
+                <th className={styles.th}>Piloto</th>
+                <th className={styles.th}>País</th>
+                <th className={styles.th}>Puntos</th>
+                {raceEvent.map((event, i) => (
+                  <th key={i} className={styles.th}>{event.date}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {championshipStandings.map((driver, index) => (
+                <tr key={driver.name} className={`${styles.tr} ${styles.championshipRow}`}>
+                  <td className={styles.td}>{index + 1}</td>
+                  <td className={styles.td}>{driver.name}</td>
+                  <td className={styles.td}>{driver.country}</td>
+                  <td className={`${styles.td} ${styles.totalPoints}`}>{driver.totalPoints}</td>
+                  {raceEvent.map((event, i) => {
+                    const eventResult = driver.events.find(e => e.date === event.date)
+                    const isSelected = event.date === selectedDate
+                    return (
+                      <td key={i} className={`${styles.td} ${isSelected ? styles.selectedDate : ''}`}>
+                        {eventResult ? `${eventResult.position}° (${eventResult.points + eventResult.fPoints})` : 'DNF'}
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
