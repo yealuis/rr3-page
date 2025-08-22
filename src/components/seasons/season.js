@@ -367,7 +367,7 @@ export const season30 = [
       },
       {
         name: "Wilfredo A.",
-        distance: 2.95,
+        distance: 21.95,
         country: "VEN",
       },
       {
