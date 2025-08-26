@@ -427,7 +427,7 @@ export const mcurSeason1 = [
       },
     ]
   },
-    {
+  {
     date: "Fecha 2",
     type: "Cazador",
     circuit: "Silverstone",
@@ -455,6 +455,97 @@ export const mcurSeason1 = [
       {
         name: "Luis S.",
         distance: "684",
+        country: "VEN",
+      },
+    ]
+  },
+  {
+    date: "Fecha 3",
+    type: "Velocidad Instantanea",
+    circuit: "LeMans",
+    country: "Francia",
+    group: "Pro-Amateur",
+    serie: "Reto de Mazda Clasico",
+    level: "Nivel 9",
+    cars: ["Mazda RX-3"],
+    results: [
+      {
+        name: "Luis J.",
+        speed: 203.01,
+        country: "VEN",
+      },
+      {
+        name: "Alejandro M.",
+        speed: 204.42,
+        country: "VEN",
+      },
+      {
+        name: "Carlos S.",
+        speed: 201.80,
+        country: "VEN",
+      },
+      {
+        name: "Luis S.",
+        speed: 202.71,
+        country: "VEN",
+      },
+    ]
+  },
+  {
+    date: "Fecha 4",
+    type: "Contrarreloj",
+    circuit: "Susuka Circuit",
+    country: "Japón",
+    group: "Profesional",
+    serie: "Club de Produccion Japonesa",
+    level: "Nivel 4",
+    cars: ["Nissan 350Z (Z33)"],
+    results: [
+      {
+        name: "Luis J.",
+        time: "01:15.439",
+        country: "VEN",
+      },
+      {
+        name: "Carlos S.",
+        time: "01:14.935",
+        country: "VEN",
+      },
+      {
+        name: "Victor H.",
+        time: "01:18.835",
+        country: "VEN",
+      },
+      {
+        name: "Luis S.",
+        time: "01:15.794",
+        country: "VEN",
+      },
+    ]
+  },
+  {
+    date: "Fecha 5",
+    type: "Cara a Cara",
+    circuit: "Hockenheimring",
+    country: "Alemania",
+    group: "Amateur",
+    serie: "Internacional de Coches de Carretera",
+    level: "Nivel 17",
+    cars: ["Nissan Silvia (S15)"],
+    results: [
+      {
+        name: "Wilfredo A.",
+        time: "01:50.613",
+        country: "VEN",
+      },
+      {
+        name: "Carlos S.",
+        time: "01:50.392",
+        country: "VEN",
+      },
+      {
+        name: "Luis S.",
+        time: "01:52.291",
         country: "VEN",
       },
     ]

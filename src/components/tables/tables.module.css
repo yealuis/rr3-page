@@ -66,9 +66,7 @@
   margin: 20px auto;
   text-align: center;
   padding: 15px;
-  background-color: #f5f5f5;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .selector {
@@ -184,15 +182,41 @@
 
 /* --- Hacemos las tablas desplazables en móviles --- */
 @media (max-width: 600px) {
+  .positionsDiv {
+    padding: 1rem;
+  }
+  .title {
+    font-size: 1.2rem;
+    padding-bottom: 1rem;
+  }
+  .deltaTable {
+    padding: 8px;
+  }
+  .deltaTable h2 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .td, .th {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+  }
+  .ambulance {
+    font-size: 1.2rem;
+    padding: 0 0.7rem;
+  }
   .scrollTable {
     width: 100vw;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin-left: -16px;
-    margin-right: -16px;
+    margin-left: -8px;
+    margin-right: -8px;
   }
   .deltaTableInner, .table {
-    font-size: 0.82rem;
-    min-width: 420px;
+    font-size: 0.78rem;
+    min-width: 320px;
+  }
+  .selectorContainer {
+    padding: 8px;
+    font-size: 0.95rem;
   }
 }
