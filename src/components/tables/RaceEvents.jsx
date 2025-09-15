@@ -6,13 +6,29 @@ import PositionsTable from "./PositionsTable";
 import DeltaTable from "./DeltaTable";
 import ChampionshipTable from "./ChampionshipTable";
 
-const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, setSelectedDate: setSelectedDateProp }) => {
-  const [internalSelectedDate, internalSetSelectedDate] = useState(raceEvent[0].date);
+const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, setSelectedDate: setSelectedDateProp, selectedSeason: selectedSeasonProp, setSelectedSeason: setSelectedSeasonProp }) => {
+  const [internalSelectedSeason, internalSetSelectedSeason] = useState(0);
+  const [internalSelectedDate, internalSetSelectedDate] = useState(raceEvent[0]?.fechas[0]?.date);
+
+  const selectedSeasonIdx = selectedSeasonProp !== undefined ? selectedSeasonProp : internalSelectedSeason;
+  const setSelectedSeason = setSelectedSeasonProp !== undefined ? setSelectedSeasonProp : internalSetSelectedSeason;
+
+  const selectedSeason = raceEvent[selectedSeasonIdx];
+  const uniqueDates = selectedSeason?.fechas.map(event => event.date) || [];
   const selectedDate = selectedDateProp !== undefined ? selectedDateProp : internalSelectedDate;
   const setSelectedDate = setSelectedDateProp !== undefined ? setSelectedDateProp : internalSetSelectedDate;
-  const championshipStandings = calculateChampionship(raceEvent, pointsSystem);
-  const selectedEvent = raceEvent.find(event => event.date === selectedDate);
-  const uniqueDates = [...new Set(raceEvent.map(event => event.date))];
+
+  // Cambiar fecha al cambiar temporada
+  const handleSeasonChange = (e) => {
+    const idx = Number(e.target.value);
+    setSelectedSeason(idx);
+    setSelectedDate(raceEvent[idx]?.fechas[0]?.date || "");
+  };
+
+  if (!selectedSeason) return <div>No hay temporadas disponibles</div>;
+  const raceEvents = selectedSeason.fechas;
+  const championshipStandings = calculateChampionship(raceEvents, pointsSystem);
+  const selectedEvent = raceEvents.find(event => event.date === selectedDate);
 
   if (!selectedEvent) return <div>No hay datos de carrera disponibles</div>;
   const { date, type, circuit, country, group, serie, level, cars, results } = selectedEvent;
@@ -71,7 +87,7 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
     });
   }
   const referenceValue = sortedDrivers.length > 0 ? getSortValue(sortedDrivers[0]) : 0;
-  const usedPointsSystem = pointsSystem || defaultPointsSystem;
+  const usedPointsSystem = typeof pointsSystem === "function" ? pointsSystem(selectedEvent) : (pointsSystem || defaultPointsSystem);
   const driverData = sortedDrivers.map((driver, index) => {
     const position = index + 1;
     const points = index < usedPointsSystem.length ? usedPointsSystem[index] : 0;
@@ -173,7 +189,17 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
   return (
     <div>
       <div className={styles.selectorContainer}>
-        <label>Selecionar Fecha: </label>
+        <label>Seleccionar Temporada: </label>
+        <select value={selectedSeasonIdx} onChange={handleSeasonChange}>
+          {raceEvent
+            .sort((a, b) => a.temporada - b.temporada) // Ordena por número de temporada
+            .map((season, idx) => (
+              <option key={idx} value={idx}>
+                {`Temporada ${season.temporada} (${season.nroFechas} fechas)`}
+              </option>
+            ))}
+        </select>
+        <label>Seleccionar Fecha: </label>
         <select value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)}>
           {uniqueDates.map((date, index) => (
             <option key={index} value={date}>{date}</option>
@@ -183,6 +209,7 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
       <div className={styles.positionsDiv}>
         <h1 className={styles.title}>
           Campeonato Interno<br/>
+          {`Temporada ${selectedSeason.temporada} (${selectedSeason.nroFechas} fechas)`}<br/>
           {group} - {serie} - {level}<br/>
           {date} - {type}<br/>
           {circuit} - {country}<br/>
@@ -192,7 +219,7 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
       </div>
       <DeltaTable drivers={deltaDrivers} title={`Diferencias de ${type}`} />
       {hayVueltaRapida && <DeltaTable drivers={deltaDriversFastLap} title="Diferencias de Vuelta Rápida" />}
-      <ChampionshipTable championshipStandings={championshipStandings} raceEvent={raceEvent} selectedDate={selectedDate} />
+      <ChampionshipTable championshipStandings={championshipStandings} raceEvent={raceEvents} selectedDate={selectedDate} />
     </div>
   );
 };

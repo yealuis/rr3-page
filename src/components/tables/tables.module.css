@@ -21,7 +21,7 @@
 }
 
 .td, .th {
-  padding: 1rem 3rem;
+  padding: 1rem 2rem;
   text-align: center;
 }
 
@@ -181,7 +181,7 @@
 }
 
 /* --- Hacemos las tablas desplazables en móviles --- */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .positionsDiv {
     padding: 1rem;
   }

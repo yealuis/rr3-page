@@ -64,10 +64,40 @@ export const calculateChampionship = (events, pointsSystemArg) => {
     } else {
       usedPointsSystem = pointsSystem
     }
-    sortedResults.forEach((driver, index) => {
-      const driverName = driver.name
-      const points = index < usedPointsSystem.length ? usedPointsSystem[index] : 0
-      const fPoints = fastLapPointsMap[driverName] || 0
+    // Asignar puntos considerando empates
+    let position = 0;
+    let prevValue = null;
+    let tieCount = 0;
+    let pointsForPosition = [];
+    let valueGetter;
+    if (type === "Contrarreloj" || type === "Autocross" || type === "Cara a Cara") {
+      valueGetter = d => timeToMilliseconds(d.time || "99:99.999");
+    } else if (type === "Copa") {
+      valueGetter = d => timeToMilliseconds(d.totalTime || "99:99.999");
+    } else if (type === "Resistencia" || type === "Cazador") {
+      valueGetter = d => d.distance || 0;
+    } else if (type === "Velocidad Instantanea" || type === "Record de Velocidad") {
+      valueGetter = d => d.speed || 0;
+    } else {
+      valueGetter = () => 0;
+    }
+    // Calcular los puntos para cada posición considerando empates
+    sortedResults.forEach((driver, idx) => {
+      const value = valueGetter(driver);
+      if (prevValue === null || value !== prevValue) {
+        position = idx;
+        tieCount = 1;
+      } else {
+        tieCount++;
+      }
+      pointsForPosition[idx] = usedPointsSystem[position] || 0;
+      prevValue = value;
+    });
+    // Asignar puntos y registrar en el campeonato
+    sortedResults.forEach((driver, idx) => {
+      const driverName = driver.name;
+      const points = pointsForPosition[idx];
+      const fPoints = fastLapPointsMap[driverName] || 0;
       if (!championship[driverName]) {
         championship[driverName] = {
           name: driverName,
@@ -76,15 +106,15 @@ export const calculateChampionship = (events, pointsSystemArg) => {
           events: []
         }
       }
-      championship[driverName].totalPoints += points + fPoints
+      championship[driverName].totalPoints += points + fPoints;
       championship[driverName].events.push({
         date: event.date,
         points: points,
         fPoints: fPoints,
-        position: index + 1,
+        position: idx + 1,
         fastLap: driver.fastLap || "-"
-      })
-    })
+      });
+    });
   })
   return Object.values(championship).sort((a, b) => b.totalPoints - a.totalPoints)
 }

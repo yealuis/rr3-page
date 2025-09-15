@@ -1,10 +1,13 @@
-import { season30 } from "@/components/seasons/season";
-import RaceEvents from "@/components/tables/RaceEvents";
+import { VSSTCI } from "@/components/seasons/season"
+import RaceEvents from "@/components/tables/RaceEvents"
+import Link from "next/link"
+import styles from "./page.module.css"
 
 export default function VSST() {
   return (
     <div>
-      <RaceEvents raceEvent={season30}/>
+      <Link href={"/vsst/estadisticas"} className={styles.link} ><span>Estadísticas</span></Link>
+      <RaceEvents raceEvent={VSSTCI}/>
     </div>
   )
 }

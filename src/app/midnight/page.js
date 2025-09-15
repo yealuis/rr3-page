@@ -1,7 +1,9 @@
 "use client"
-import { mcurSeason1 } from "@/components/seasons/season";
+import { MCUR } from "@/components/seasons/season";
 import RaceEvents from "@/components/tables/RaceEvents";
 import { useState } from "react";
+import Link from "next/link";
+import styles from "./page.module.css";
 
 const pointsSystemByEvent = (event) => {
   const fechasCortas = ["Fecha 1", "Fecha 2", "Fecha 3", "Fecha 4"];
@@ -10,11 +12,12 @@ const pointsSystemByEvent = (event) => {
 };
 
 export default function Midnight() {
-  const [selectedDate, setSelectedDate] = useState(mcurSeason1[0].date);
+  const [selectedDate, setSelectedDate] = useState(MCUR[0].date);
   return (
     <div>
+      <Link href={"/midnight/estadisticas"} className={styles.link} ><span>Estadísticas</span></Link>
       <RaceEvents 
-        raceEvent={mcurSeason1}
+        raceEvent={MCUR}
         pointsSystem={pointsSystemByEvent}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
