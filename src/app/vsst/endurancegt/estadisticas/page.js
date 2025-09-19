@@ -7,6 +7,9 @@ const escuderias = ultimaTemporada.escuderias;
 
 export default function EstadisticasEnduranceGT() {
   return (
-    <Statistics temporadas={VSSTEnduranceGT} pointsSystem={pointsSystem} nombreTorneo="Endurance GT" escuderias={escuderias} />
+    <div>
+      {/*<Statistics temporadas={VSSTEnduranceGT} pointsSystem={pointsSystem} nombreTorneo="Endurance GT" escuderias={escuderias} />*/}
+      <h1 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold" }}>Estadisticas Endurance GT Aun no disponible</h1>
+    </div>
   );
 }
