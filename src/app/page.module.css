@@ -35,7 +35,7 @@
   border-radius: 2rem;
   height: 50%;
   width: 60%;
-  max-width: 50rem;
+  max-width: 80rem;
   
   @media (max-width: 768px) {
     flex-direction: column;

@@ -839,3 +839,131 @@ export const MCUR = [
     ]
   }
 ]
+
+export const VSSTEnduranceGT = [
+  {
+    temporada: 1,
+    nroFechas: 10,
+    fechas: [
+      {
+        date: "Fecha 1",
+        type: "Endurance",
+      }
+    ]
+  },
+  {
+    temporada: 2,
+    nroFechas: 12,
+    escuderias: [
+      {
+        name: "Porsche",
+        pilotos: ["Felix R.", "Luis J.", "Luis S."],
+      },
+      {
+        name: "Aston Martin",
+        pilotos: ["Wilfredo A.", "Victor H.", "Esteban C."],
+      },
+      {
+        name: "Chevrolet",
+        pilotos: ["Gabriel G.", "Alejandro M.", "Abdiel G."],
+      },
+      {
+        name: "Aston Martin Sport",
+        pilotos: ["Donovan O.", "Alfredo M.", "Jhan C."],
+      }
+    ],
+    fechas: [
+      {
+        date: "Fecha 1",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 2",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 3",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 4",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 5",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 6",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 7",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 8",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 9",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 10",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 11",
+        type: "Endurance",
+      },
+      {
+        date: "Fecha 12",
+        type: "Copa",
+        circuit: "Le Mans",
+        country: "Francia",
+        group: "Endurance GT Racing",
+        serie: "Temporada 2020",
+        level: "Nivel 17 o 19",
+        cars: ["Porsche 911 RSR (2020)", "Aston Martin Vantage GTE (2019)", "Chevrolet Corvette C8.R (2020)"],
+        results: [
+          {
+            name: "Felix R.",
+            fastLap: "03:14.261",
+            totalTime: "16:26.333",
+            timeTrail: "03:13.564",
+            country: "VEN",
+          },
+          {
+            name: "Wilfredo A.",
+            fastLap: "03:15.551",
+            totalTime: "16:40.090",
+            timeTrail: "03:16.257",
+            country: "VEN",
+          },
+          {
+            name: "Donovan O.",
+            fastLap: "03:16:821",
+            totalTime: "16:39:401",
+            timeTrail: "03:16.946",
+            country: "VEN",
+          },
+          {
+            name: "Luis S.",
+            fastLap: "03:19.799",
+            totalTime: "16:56.781",
+            timeTrail: "03:21.563",
+            country: "ESP",
+          },
+          {
+            name: "Victor H.",
+            fastLap: "03:26.096",
+            totalTime: "17:23:113",
+            timeTrail: "03:27.253",
+            country: "VEN",
+          },
+        ]
+      }
+    ]
+  }
+]

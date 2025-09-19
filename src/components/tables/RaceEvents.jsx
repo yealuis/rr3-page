@@ -1,12 +1,13 @@
 "use client"
 import { useState } from "react";
 import styles from "./tables.module.css";
-import { calculateChampionship, timeToMilliseconds, fastLapPoints, pointsSystem as defaultPointsSystem, formatDifference } from "./helpers";
+import { calculateChampionship, timeToMilliseconds, fastLapPoints, pointsSystem as defaultPointsSystem, formatDifference, calculateConstructorsChampionship } from "./helpers";
 import PositionsTable from "./PositionsTable";
 import DeltaTable from "./DeltaTable";
 import ChampionshipTable from "./ChampionshipTable";
+import ConstructorsTable from "./ConstructorsTable";
 
-const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, setSelectedDate: setSelectedDateProp, selectedSeason: selectedSeasonProp, setSelectedSeason: setSelectedSeasonProp }) => {
+const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, setSelectedDate: setSelectedDateProp, selectedSeason: selectedSeasonProp, setSelectedSeason: setSelectedSeasonProp, escuderias }) => {
   const [internalSelectedSeason, internalSetSelectedSeason] = useState(0);
   const [internalSelectedDate, internalSetSelectedDate] = useState(raceEvent[0]?.fechas[0]?.date);
 
@@ -71,14 +72,14 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
         return "-";
     }
   };
-  const validResults = results.filter(driver => {
+  const validResults = (results || []).filter(driver => {
     const value = getSortValue(driver);
     return value !== null && value !== undefined && !isNaN(value);
   });
   const sortedDrivers = [...validResults].sort((a, b) => getSortValue(a) - getSortValue(b));
   const fastLapPointsMap = {};
   if (type === "Copa") {
-    const validFastLapDrivers = results.filter(driver => driver.fastLap && driver.fastLap !== '-');
+    const validFastLapDrivers = (results || []).filter(driver => driver.fastLap && driver.fastLap !== '-');
     validFastLapDrivers.sort((a, b) => timeToMilliseconds(a.fastLap) - timeToMilliseconds(b.fastLap));
     validFastLapDrivers.forEach((driver, index) => {
       if (index < fastLapPoints.length) {
@@ -164,10 +165,10 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
     };
   });
   // DeltaTable de vuelta rápida
-  const hayVueltaRapida = results.some(driver => driver.fastLap && driver.fastLap !== "-");
+  const hayVueltaRapida = (results || []).some(driver => driver.fastLap && driver.fastLap !== "-");
   let deltaDriversFastLap = [];
   if (hayVueltaRapida) {
-    const sortedByFastLap = [...results].filter(d => d.fastLap && d.fastLap !== "-")
+    const sortedByFastLap = [...(results || [])].filter(d => d.fastLap && d.fastLap !== "-")
       .sort((a, b) => timeToMilliseconds(a.fastLap) - timeToMilliseconds(b.fastLap));
     const referencia = sortedByFastLap.length > 0 ? timeToMilliseconds(sortedByFastLap[0].fastLap) : 0;
     deltaDriversFastLap = sortedByFastLap.map((driver, index) => {
@@ -185,6 +186,13 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
         deltaDisplay: deltaDisplay || "-"
       };
     });
+  }
+  // Tabla de constructores si hay escuderias
+  let tablaConstructores = null;
+  if (escuderias && escuderias.length > 0) {
+    tablaConstructores = (
+      <ConstructorsTable championshipStandings={championshipStandings} escuderias={escuderias} raceEvents={raceEvents} />
+    );
   }
   return (
     <div>
@@ -220,6 +228,7 @@ const RaceEvents = ({ raceEvent, pointsSystem, selectedDate: selectedDateProp, s
       <DeltaTable drivers={deltaDrivers} title={`Diferencias de ${type}`} />
       {hayVueltaRapida && <DeltaTable drivers={deltaDriversFastLap} title="Diferencias de Vuelta Rápida" />}
       <ChampionshipTable championshipStandings={championshipStandings} raceEvent={raceEvents} selectedDate={selectedDate} />
+      {tablaConstructores}
     </div>
   );
 };

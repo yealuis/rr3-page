@@ -1,4 +1,4 @@
-import { calculateChampionship } from "./helpers";
+import { calculateChampionship, calculateConstructorsChampionship } from "./helpers";
 
 function calcularEstadisticas(temporadas, pointsSystem) {
   const pilotos = {};
@@ -74,8 +74,38 @@ function calcularEstadisticas(temporadas, pointsSystem) {
   };
 }
 
-export default function Statistics({ temporadas, pointsSystem, nombreTorneo }) {
+export default function Statistics({ temporadas, pointsSystem, nombreTorneo, escuderias }) {
   const estadisticas = calcularEstadisticas(temporadas, pointsSystem);
+  // Para el campeonato de constructores, usar la última temporada y sus escuderías
+  let tablaConstructores = null;
+  if (escuderias && temporadas.length > 0) {
+    const ultimaTemporada = temporadas[temporadas.length - 1];
+    const championship = calculateChampionship(ultimaTemporada.fechas, pointsSystem);
+    const tabla = calculateConstructorsChampionship(championship, escuderias);
+    tablaConstructores = (
+      <>
+        <h3>Campeonato de Constructores</h3>
+        <table border="1" cellPadding="4">
+          <thead>
+            <tr>
+              <th>Escudería</th>
+              <th>Puntos</th>
+              <th>Pilotos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tabla.map((escuderia) => (
+              <tr key={escuderia.name}>
+                <td>{escuderia.name}</td>
+                <td>{escuderia.totalPoints}</td>
+                <td>{escuderia.pilotos.join(", ")}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    );
+  }
   return (
     <div>
       <h2>Estadísticas {nombreTorneo}</h2>
@@ -91,6 +121,7 @@ export default function Statistics({ temporadas, pointsSystem, nombreTorneo }) {
           <li key={c.temporada}>Temporada {c.temporada}: {c.nombre}</li>
         ))}
       </ul>
+      {tablaConstructores}
       <h3>Estadísticas individuales</h3>
       <table border="1" cellPadding="4">
         <thead>

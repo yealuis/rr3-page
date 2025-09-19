@@ -33,7 +33,44 @@ export const calculateChampionship = (events, pointsSystemArg) => {
   const championship = {}
   events.forEach(event => {
     const { results, type, date } = event
-    const sortedResults = [...results].sort(( a, b ) => {
+    if (!results || !Array.isArray(results)) return; // Protección contra undefined
+    // Copia profunda para no modificar los datos originales
+    const resultsCopy = results.map(driver => ({ ...driver }));
+    // Penalización: si fastLap < timeTrail, sumar la diferencia a totalTime
+    if (type === "Copa" && resultsCopy.some(d => d.fastLap && d.timeTrail)) {
+      resultsCopy.forEach(driver => {
+        if (driver.fastLap && driver.timeTrail) {
+          const fastLapMs = timeToMilliseconds(driver.fastLap);
+          const timeTrailMs = timeToMilliseconds(driver.timeTrail);
+          if (fastLapMs < timeTrailMs) {
+            // Penalización: sumar diferencia a totalTime
+            const diff = timeTrailMs - fastLapMs;
+            if (driver.totalTime) {
+              const totalTimeMs = timeToMilliseconds(driver.totalTime);
+              // Guardar el tiempo penalizado como string con el mismo formato
+              const penalizedMs = totalTimeMs + diff;
+              const penalizedMinutes = Math.floor(penalizedMs / 60000);
+              const penalizedSeconds = Math.floor((penalizedMs % 60000) / 1000);
+              const penalizedMillis = penalizedMs % 1000;
+              driver.totalTime = `${penalizedMinutes.toString().padStart(2, '0')}:${penalizedSeconds.toString().padStart(2, '0')}.${penalizedMillis.toString().padStart(3, '0')}`;
+              driver.penalized = true;
+              driver.penaltyDiff = diff;
+            }
+          }
+        }
+      });
+    }
+    // Determinar el sistema de puntos para este evento
+    let usedPointsSystem = pointsSystem
+    if (typeof pointsSystemArg === 'function') {
+      usedPointsSystem = pointsSystemArg(event)
+    } else if (Array.isArray(pointsSystemArg)) {
+      usedPointsSystem = pointsSystemArg
+    } else {
+      usedPointsSystem = pointsSystem
+    }
+    // Ordenar resultados según el tipo de evento
+    const sortedResults = [...resultsCopy].sort(( a, b ) => {
       if (type === "Contrarreloj" || type === "Autocross" || type === "Cara a Cara") {
         return timeToMilliseconds(a.time || "99:99.999") - timeToMilliseconds(b.time || "99:99.999")
       } else if (type === "Copa") {
@@ -45,24 +82,17 @@ export const calculateChampionship = (events, pointsSystemArg) => {
       }
       return 0
     })
+    // Puntos de vuelta rápida: solo para el piloto más rápido sin penalización
     const fastLapPointsMap = {}
     if (type === "Copa") {
-      const validFastLapDrivers = results.filter(driver => driver.fastLap && driver.fastLap !== '-')
+      // Filtrar solo los que tienen fastLap y no están penalizados
+      const validFastLapDrivers = resultsCopy.filter(driver => driver.fastLap && driver.fastLap !== '-' && (!driver.penalized));
       validFastLapDrivers.sort((a,b) => timeToMilliseconds(a.fastLap) - timeToMilliseconds(b.fastLap))
       validFastLapDrivers.forEach((driver, index) => {
         if (index < fastLapPoints.length) {
           fastLapPointsMap[driver.name] = fastLapPoints[index]
         }
       })
-    }
-    // Determinar el sistema de puntos para este evento
-    let usedPointsSystem = pointsSystem
-    if (typeof pointsSystemArg === 'function') {
-      usedPointsSystem = pointsSystemArg(event)
-    } else if (Array.isArray(pointsSystemArg)) {
-      usedPointsSystem = pointsSystemArg
-    } else {
-      usedPointsSystem = pointsSystem
     }
     // Asignar puntos considerando empates
     let position = 0;
@@ -112,9 +142,29 @@ export const calculateChampionship = (events, pointsSystemArg) => {
         points: points,
         fPoints: fPoints,
         position: idx + 1,
-        fastLap: driver.fastLap || "-"
+        fastLap: driver.fastLap || "-",
+        penalized: driver.penalized || false,
+        penaltyDiff: driver.penaltyDiff || 0
       });
     });
   })
   return Object.values(championship).sort((a, b) => b.totalPoints - a.totalPoints)
+}
+
+// Calcula el campeonato de constructores sumando los puntos de los pilotos de cada escudería
+export function calculateConstructorsChampionship(championship, escuderias) {
+  if (!escuderias) return [];
+  const constructorPoints = escuderias.map(escuderia => {
+    const totalPoints = escuderia.pilotos.reduce((acc, piloto) => {
+      const pilotoData = championship.find(p => p.name === piloto);
+      return acc + (pilotoData ? pilotoData.totalPoints : 0);
+    }, 0);
+    return {
+      name: escuderia.name,
+      totalPoints,
+      pilotos: escuderia.pilotos
+    };
+  });
+  // Ordenar por puntos descendente
+  return constructorPoints.sort((a, b) => b.totalPoints - a.totalPoints);
 }

@@ -181,7 +181,7 @@
 }
 
 /* --- Hacemos las tablas desplazables en móviles --- */
-@media (max-width: 768px) {
+@media (max-width: 1080px) {
   .positionsDiv {
     padding: 1rem;
   }
